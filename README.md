@@ -5,7 +5,8 @@ Birdsey for CSCI311 Artificial Intelligence at Middlebury College in Spring 2020
 ## Overview 
 Program utilized minimax algorithm with alpha-beta pruning to simualte game play up 
 to a tree depth of 5 - employs a number of heuristic functions to evaluate utility 
-of board nodes
+of board nodes. To play simply compile and run `java AIC4` from then command line of
+parent repository. 
 
 ## Notes 
 - Addition of data table... 
