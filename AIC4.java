@@ -24,6 +24,7 @@ public class AIC4 {
     public static void main(String[] args) {
         Board board = new Board(); 
         Minimax agent = new Minimax(); 
+        agent.depth = 5; 
         board.setBoard(); 
         System.out.println("\nWelcome to command-line Connect-4 against an AI player. Press (q) at anytime to quit. Human (X) gets to make the first move:");
         board.printBoard(); 

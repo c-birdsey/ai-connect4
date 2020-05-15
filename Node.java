@@ -15,14 +15,18 @@ import java.util.List;
 
 public class Node {
     // globals 
-    public int MAX = 10000;
-    public int MIN = -10000; 
+    public int MAX = 100000;
+    public int MIN = -100000; 
 
     Board board; 
     int lastMove, depth; 
     boolean isLeaf, isMaxPlayer; 
     Node parent; 
     List <Node> children = new ArrayList<Node>(); 
+
+    //default settings for normal game where AI agent is "O"
+    String agentType = "O"; 
+    String opType = "X"; 
 
     int blockingMove = -1; 
 
@@ -47,10 +51,10 @@ public class Node {
         /*********************************************************************/
 
         // if child board has a win, always take it 
-        if(board.checkWin("O"))
+        if(board.checkWin(agentType))
             return MAX; 
 
-        if(board.checkWin("X"))
+        if(board.checkWin(opType))
             return MIN; 
 
         // avoid board if it creates a win condition for opponent
@@ -62,11 +66,11 @@ public class Node {
         // otherwise, score entire board layout for AI
         for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 7; j++) {
-                if(board.boardArr[i][j].equals("O")) {
-                    double vertScore = scoreVerticals(i, j, "O"); 
-                    double horizScore = scoreHorizontals(i, j, "O"); 
-                    double diagScore = scoreDiagonals(i, j, "O"); 
-                    double neighborScore = scoreNeighborhoods(i, j, "O"); 
+                if(board.boardArr[i][j].equals(agentType)) {
+                    double vertScore = scoreVerticals(i, j, agentType); 
+                    double horizScore = scoreHorizontals(i, j, agentType); 
+                    double diagScore = scoreDiagonals(i, j, agentType); 
+                    double neighborScore = scoreNeighborhoods(i, j, agentType); 
                     utility += (vertScore + horizScore + diagScore + neighborScore); 
                 }
             }
@@ -79,7 +83,7 @@ public class Node {
      * method to set leaf status of node based of winning conditions 
      */
     public void setLeaf() {
-        if (board.checkWin("X") || board.checkWin("O")) {
+        if (board.checkWin(opType) || board.checkWin(agentType)) {
             isLeaf = true;  
         }
     }
@@ -93,14 +97,14 @@ public class Node {
         int col = board.lastHumanMove - 1; 
         int row = 0; 
 
-        while(!board.boardArr[row][col].equals("X")) {
+        while(!board.boardArr[row][col].equals(opType) && row < 5) {
             row ++; 
         }
 
         // call score methods on X for last move location - this will set globals if block needed 
-        scoreDiagonals(row, col, "X"); 
-        scoreHorizontals(row, col, "X"); 
-        scoreVerticals(row, col, "X"); 
+        scoreDiagonals(row, col, opType); 
+        scoreHorizontals(row, col, opType); 
+        scoreVerticals(row, col, opType); 
     }
 
     /**
@@ -117,9 +121,9 @@ public class Node {
         }
 
         // call score methods on X for last move location - this will set globals if block needed 
-        scoreDiagonals(row, col, "X"); 
-        scoreHorizontals(row, col, "X"); 
-        scoreVerticals(row, col, "X"); 
+        scoreDiagonals(row, col, opType); 
+        scoreHorizontals(row, col, opType); 
+        scoreVerticals(row, col, opType); 
     }
 
     /****************************** HEURISTICS *******************************/
@@ -207,7 +211,7 @@ public class Node {
                 } else
                     score -= 3; 
             }
-            if(typeCount == 3 && spaceCount == 1 && type.equals("X")) {
+            if(typeCount == 3 && spaceCount == 1 && type.equals(opType)) {
                 handleWinCondition(blockLocation); 
             }
         }         
@@ -249,7 +253,7 @@ public class Node {
                 } else
                     score -= 3; 
             }
-            if(typeCount == 3 && spaceCount == 1 && type.equals("X")) {
+            if(typeCount == 3 && spaceCount == 1 && type.equals(opType)) {
                 handleWinCondition(blockLocation); 
             }
         }         
@@ -301,7 +305,7 @@ public class Node {
             }
             upperLeftRow ++; 
             upperLeftCol ++; 
-            if(typeCount == 3 && spaceCount == 1 && type.equals("X")) {
+            if(typeCount == 3 && spaceCount == 1 && type.equals(opType)) {
                 handleWinCondition(blockLocation); 
             }
         }
@@ -334,7 +338,7 @@ public class Node {
             }
             upperRightRow ++; 
             upperRightCol --; 
-            if(typeCount == 3 && spaceCount == 1 && type.equals("X")) {
+            if(typeCount == 3 && spaceCount == 1 && type.equals(opType)) {
                 handleWinCondition(blockLocation); 
             }
         }

@@ -1,24 +1,24 @@
 /**
  * CS311 Artificial Intelligence Final Project - Spring 2020
  * 
- * File: Minimax.java 
+ * File: GreedyAI.java 
  * Authors: Calder Birdsey and Brandon Choe 
  * Updated: 4/26/20
  * 
- * Description: Code for AI agent to make move in Connect-4. Uses minmax tree
- * with alpha-beta pruning. Called from driver file AIC4.java
+ * Description: 
  */
 
-public class Minimax {
+public class GreedyAI {
 
-    public int depth = 5;
+    public int depth = 1;
     public int NEGINFINITY = -100000; 
     public int POSINFINITY = 100000;
     Node root;
 
     /**
      * method to create AI agent for current move - checks base cases and then 
-     * runs minimax algorithm to determine next best move
+     * runs greedy choice algorithm to determine next best move. Greedy AI plays 
+     * as the "X" piece (taking the place of human player and moving first)
      * @param state current board state of connect-4 game 
      * @return int col, the column of the most recent move
      */
@@ -29,6 +29,8 @@ public class Minimax {
         root.isMaxPlayer = true;
         root.parent = null;
         root.isLeaf = false;
+        root.agentType = "X"; 
+        root.opType = "O"; 
 
         // init col for best move 
         int col; 
@@ -37,91 +39,65 @@ public class Minimax {
         root.checkWinCondition(); 
        
         // if AI first move, always go middle
-        if(root.board.moveCount == 1) {
+        if(root.board.moveCount == 0) {
             col = 4; 
         // if second move, go to col 5 or 3 or middle again
-        } else if(root.board.moveCount == 3 && !root.board.boardArr[5][3].equals("O")) {
+        } else if(root.board.moveCount == 2 && !root.board.boardArr[5][3].equals("X")) {
             if(root.board.lastHumanMove == 3) {
                 col = 5; 
             } else {
                 col = 3; 
             }
-        } else if(root.board.moveCount == 3 && root.board.boardArr[5][3].equals("O")) {
+        } else if(root.board.moveCount == 2 && root.board.boardArr[5][3].equals("X")) {
             col = 4; 
         } else if(root.blockingMove >= 0) { // check for opponent win conditions and block
             col = root.blockingMove + 1; 
-        } else { // otherwise, call minimax
-            col = minimax(root, depth, true).lastMove;
-            // Node temp = minimax(root, depth, true); 
-            // if(temp != null) {
-            //     col = minimax(root, depth, true).lastMove;
-            // } else {
-            //     col = 0; 
-            //     for(int i = 0; i <= 6; i ++) {
-            //         if(root.board.validMove(i)) {
-            //             col = i; 
-            //         }
-            //     }
-            // }
+        } else { // otherwise, call greedy choice
+            col = greedyChoice(root, depth, true).lastMove;
         }
 
-        // make move in current board state
-        state.makeMove(col, false);
+        // return move
         return col; 
     }
 
     /**
-     * method to execute the minimax algorithm 
+     * method to execute greedy selection for next move
      * @param node parent node board instance 
      * @param currDepth int depth of current node param in tree
      * @param max boolean value indicating maximizing or minimizing level
      * @return node of best next board instance given current board state
      */
-    public Node minimax(Node node, int currDepth, boolean max) {
+    public Node greedyChoice(Node node, int currDepth, boolean max) {
         // check base cases
         if (currDepth == 0 || node.isLeaf) {
-            // System.out.println("\n\nLEAF: \t" + node.evalUtility() + "\t" + node.lastMove); 
             return node;
         }
 
         // create children 
         createChildren(node, max, currDepth - 1);
 
-        if(node.children.size() == 0) {
-            return node; 
-        }
+        Node bestChild = null; 
+        double maxUtil = NEGINFINITY; 
+        for (Node child : node.children) {
+            // readjust default type settings 
+            child.agentType = "X"; 
+            child.opType = "O"; 
+            double utility = 0; 
+            if(child != null) {
+                utility = child.evalUtility(); 
+            }
 
-        if (max) {
-            Node bestChild = null; 
-            double maxUtil = NEGINFINITY; 
-            for (Node child : node.children) {
-                double utility = 0; 
-                Node temp  = minimax(child, currDepth - 1, false); 
-                if(temp != null) {
-                    utility = temp.evalUtility(); 
-                }
-                if(utility > maxUtil) {
-                    bestChild = child; 
-                    maxUtil = utility;
-                }
+            // incorporate element of "randomness" into moves 
+            double rand = Math.random(); 
+            if(utility >= (.65 * maxUtil) && rand < 0.5) {
+                bestChild = child; 
+                maxUtil = utility;
+            } else if(utility > maxUtil) {
+                bestChild = child; 
+                maxUtil = utility;
             }
-            return bestChild; 
-        } else {
-            Node bestChild = null; 
-            double minUtil = POSINFINITY; 
-            for (Node child : node.children) {
-                double utility = 0; 
-                Node temp  = minimax(child, currDepth - 1, true); 
-                if(temp != null) {
-                    utility = temp.evalUtility(); 
-                }
-                if(utility < minUtil) {
-                    minUtil = utility; 
-                    bestChild = child; 
-                }
-            }
-            return bestChild; 
         }
+        return bestChild; 
     }
 
     /**
@@ -136,7 +112,7 @@ public class Minimax {
             if (parent.board.validMove(i)) {
                 // create new child board
                 Board temp = parent.board.copyBoard(); 
-                temp.makeMove(i, !isMax);
+                temp.makeMove(i, isMax);
 
                 // create child node 
                 Node child = new Node(); 
@@ -156,4 +132,5 @@ public class Minimax {
             }
         }
     }
+
 }

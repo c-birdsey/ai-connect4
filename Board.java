@@ -36,6 +36,10 @@ public class Board implements Cloneable{
      */
 	public void makeMove(int col, boolean player){
         for(int i = 5; i >= 0; i--) {
+            if(col > 7) {
+                col = 7; 
+            }
+            
             if(boardArr[i][col - 1].equals("_")) {
                 if(player) {
                     boardArr[i][col - 1] = "X";
