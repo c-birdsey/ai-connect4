@@ -14,10 +14,11 @@ public class AIC4_Sim {
     
     // init game to begin with human turn
     public static boolean humanTurn = true; 
-    public static int simCount = 1000; 
+    public static int simCount = 1; 
     public static int ties = 0; 
     public static int greedyWin = 0; 
     public static int smartWin = 0; 
+    public static int moveCountSum = 0; 
     public static ArrayList<Integer> moveCounts = new ArrayList<Integer>();  
 
     /**
@@ -37,6 +38,7 @@ public class AIC4_Sim {
 
             //simulate game
             while(board.playing) {
+                
                 if(turn == 0) {
                     // simualte "human" player 
                     int col = greedyAgent.initAgent(board); 
@@ -47,10 +49,12 @@ public class AIC4_Sim {
                     smartAgent.initAgent(board); 
                     turn = 0; 
                 }
+                board.printBoard();
             }
 
             // store move count 
-            moveCounts.add(board.moveCount); 
+            moveCounts.add(board.moveCount);
+            moveCountSum += board.moveCount;  
 
             // store winner
             if(board.boardFull) {
@@ -65,10 +69,13 @@ public class AIC4_Sim {
             gameCount ++; 
         }
 
+        double avgMoves = moveCountSum / simCount; 
+
         System.out.println("\nSimulation complete...");
         System.out.println("Performance statistics:");
         System.out.println("Advanced AI won " + smartWin + " out of " + simCount + " games.");
         System.out.println("Greedy AI won " + greedyWin + " out of " + simCount + " games.");
         System.out.println(ties + " tie games occured");
+        System.out.println("The average move count for this round was " + avgMoves + " moves");
     }
 }
