@@ -3,7 +3,7 @@
  * 
  * File: Minimax.java 
  * Authors: Calder Birdsey and Brandon Choe 
- * Updated: 4/26/20
+ * Updated: 5/15/20
  * 
  * Description: Code for AI agent to make move in Connect-4. Uses minmax tree
  * with alpha-beta pruning. Called from driver file AIC4.java
@@ -51,18 +51,7 @@ public class Minimax {
         } else if(root.blockingMove >= 0) { // check for opponent win conditions and block
             col = root.blockingMove + 1; 
         } else { // otherwise, call minimax
-            col = minimax(root, depth, true).lastMove;
-            // Node temp = minimax(root, depth, true); 
-            // if(temp != null) {
-            //     col = minimax(root, depth, true).lastMove;
-            // } else {
-            //     col = 0; 
-            //     for(int i = 0; i <= 6; i ++) {
-            //         if(root.board.validMove(i)) {
-            //             col = i; 
-            //         }
-            //     }
-            // }
+            col = minimax(root, depth, NEGINFINITY, POSINFINITY, true).lastMove; 
         }
 
         // make move in current board state
@@ -74,29 +63,29 @@ public class Minimax {
      * method to execute the minimax algorithm 
      * @param node parent node board instance 
      * @param currDepth int depth of current node param in tree
+     * @param alpha int alpha value
+     * @param beta int beta value
      * @param max boolean value indicating maximizing or minimizing level
      * @return node of best next board instance given current board state
      */
-    public Node minimax(Node node, int currDepth, boolean max) {
+    public Node minimax(Node node, int currDepth, double alpha, double beta, boolean max) {
         // check base cases
         if (currDepth == 0 || node.isLeaf) {
-            // System.out.println("\n\nLEAF: \t" + node.evalUtility() + "\t" + node.lastMove); 
             return node;
         }
 
         // create children 
         createChildren(node, max, currDepth - 1);
-
         if(node.children.size() == 0) {
             return node; 
         }
 
-        if (max) {
+        if(max) {
             Node bestChild = null; 
             double maxUtil = NEGINFINITY; 
             for (Node child : node.children) {
                 double utility = 0; 
-                Node temp  = minimax(child, currDepth - 1, false); 
+                Node temp = minimax(child, currDepth - 1, alpha, beta, false);
                 if(temp != null) {
                     utility = temp.evalUtility(); 
                 }
@@ -104,6 +93,14 @@ public class Minimax {
                     bestChild = child; 
                     maxUtil = utility;
                 }
+
+                // set new alpha val
+                if(maxUtil > alpha) 
+                    alpha = maxUtil; 
+                
+                // prune if condition met
+                if(alpha >= beta) 
+                    break; 
             }
             return bestChild; 
         } else {
@@ -111,14 +108,22 @@ public class Minimax {
             double minUtil = POSINFINITY; 
             for (Node child : node.children) {
                 double utility = 0; 
-                Node temp  = minimax(child, currDepth - 1, true); 
+                Node temp = minimax(child, currDepth - 1, alpha, beta, true);
                 if(temp != null) {
                     utility = temp.evalUtility(); 
                 }
                 if(utility < minUtil) {
-                    minUtil = utility; 
                     bestChild = child; 
+                    minUtil = utility;
                 }
+
+                // set new beta val
+                if(minUtil < beta) 
+                    beta = minUtil; 
+                
+                // prune if condition met
+                if(alpha >= beta) 
+                    break; 
             }
             return bestChild; 
         }

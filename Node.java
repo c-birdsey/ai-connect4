@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * File: Node.java
  * Authors: Calder Birdsey and Brandon Choe
- * Updated: 4/27/20
+ * Updated: 5/15/20
  * 
  * Description: Node class for AI Connect-4 minimax algorithm, evaluates board 
  * state utility via range of heuristics
@@ -24,7 +24,7 @@ public class Node {
     Node parent; 
     List <Node> children = new ArrayList<Node>(); 
 
-    //default settings for normal game where AI agent is "O"
+    //default token settings for normal game where AI agent is "O"
     String agentType = "O"; 
     String opType = "X"; 
 
@@ -402,155 +402,3 @@ public class Node {
         return mult; 
     }
 }
-
-// public int scoreDiag(int row, int col, String type){
-//     int score = 0;
-
-//     if(row==0 && col ==0){ //top left corner
-//         for(int i = 1; i<4;i++){
-//             if(board.boardArr[row + i][col + i].equals(type)){
-//                 score+=3;
-//             }
-//             else if(board.boardArr[row + i][col + i].equals("_")){
-//                 score+=1;
-//             }
-//             else{
-//                 score-=3;
-//             }
-//         }
-//     }
-
-//     else if(row==0&& col > 0 && col <6){ //top row, excluding corners
-//         for(int i =1; i<4; i++){
-//             if(col>2){
-//                 if(board.boardArr[row + i][col - i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row + i][col - i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-//             if(col<4){
-//                 if(board.boardArr[row + i][col + i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row + i][col + i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-
-//         }
-//     }
-
-//     else if(row==0&& col ==6){ //top right column
-//         for(int i =1; i<4; i++){
-//             if(board.boardArr[row + i][col - i].equals(type)){
-//                 score+=3;
-//             }
-//             if(board.boardArr[row + i][col - i].equals("_")){
-//                 score+=1;	
-//             }
-//             else{
-//                 score-=3;
-//             }
-
-//         }
-//     }
-//     else if(row>0 && row<5 && col ==6){ //rightmost column
-//         for(int i =1; i<4; i++){
-//             if(row>2){
-//                 if(board.boardArr[row - i][col - i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row - i][col - i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-//             if(row<3){
-//                 if(board.boardArr[row + i][col - i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row + i][col - i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-
-//         }
-//     }
-
-//     else if(row==5&& col ==6){ //bottom right column
-//         for(int i =1; i<4; i++){
-//             if(board.boardArr[row - i][col - i].equals(type)){
-//                 score+=3;
-//             }
-//             if(board.boardArr[row - i][col - i].equals("_")){
-//                 score+=1;	
-//             }
-//             else{
-//                 score-=3;
-//             }
-
-//         }
-//     }
-
-//     else if(row==5 && col > 0 && col <6){ //bottom row
-//         for(int i =1; i<4; i++){
-//             if(col>2){
-//                 if(board.boardArr[row - i][col - i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row - i][col - i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-//             if(col<4){
-//                 if(board.boardArr[row - i][col - i].equals(type)){
-//                     score+=3;
-//                 }
-//                 if(board.boardArr[row - i][col - i].equals("_")){
-//                     score+=1;	
-//                 }
-//                 else{
-//                     score-=3;
-//                 }
-
-//             }
-
-//         }
-//     }
-
-//     else if(row==5&& col ==0){ //bottom left corner
-//         for(int i =1; i<4; i++){
-//             if(board.boardArr[row - i][col + i].equals(type)){
-//                 score+=3;
-//             }
-//             if(board.boardArr[row - i][col + i].equals("_")){
-//                 score+=1;	
-//             }
-//             else{
-//                 score-=3;
-//             }
-//         }
-//     }
-//     return score; 
-// }

@@ -3,9 +3,10 @@
  * 
  * File: GreedyAI.java 
  * Authors: Calder Birdsey and Brandon Choe 
- * Updated: 4/26/20
+ * Updated: 5/15/20
  * 
- * Description: 
+ * Description: Greedy AI agent variation on the Minimax agent. Looks ahead to a
+ * depth of 1 using similar heuristic functions to evaluate utility. 
  */
 
 public class GreedyAI {
@@ -29,6 +30,8 @@ public class GreedyAI {
         root.isMaxPlayer = true;
         root.parent = null;
         root.isLeaf = false;
+
+        // set player tokens
         root.agentType = "X"; 
         root.opType = "O"; 
 
@@ -38,7 +41,7 @@ public class GreedyAI {
         // init opponent win condition variables in root node
         root.checkWinCondition(); 
        
-        // if AI first move, always go middle
+        // if first move, always go middle
         if(root.board.moveCount == 0) {
             col = 4; 
         // if second move, go to col 5 or 3 or middle again
@@ -68,11 +71,6 @@ public class GreedyAI {
      * @return node of best next board instance given current board state
      */
     public Node greedyChoice(Node node, int currDepth, boolean max) {
-        // check base cases
-        if (currDepth == 0 || node.isLeaf) {
-            return node;
-        }
-
         // create children 
         createChildren(node, max, currDepth - 1);
 

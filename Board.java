@@ -4,7 +4,7 @@
  * 
  * File: Board.java
  * Authors: Calder Birdsey and Brandon Choe
- * Updated: 4/27/20
+ * Updated: 5/15/20
  * 
  * Description: Board class for AI Connect-4 to simulate command line gameplay
  */

@@ -5,7 +5,7 @@ import java.util.Scanner;
  * 
  * File: AIC4.java 
  * Authors: Calder Birdsey and Brandon Choe 
- * Updated: 4/26/20
+ * Updated: 5/15/20
  * 
  * Description: Main driver file for Connect-4 with AI opponent. Implements
  * gameplay via the command line and allows human user to compete against AI

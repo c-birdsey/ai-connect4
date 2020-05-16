@@ -1,29 +1,27 @@
-import java.util.ArrayList;
-
 /**
  * CS311 Artificial Intelligence Final Project - Spring 2020
  * 
  * File: AIC4_Sim.java 
  * Authors: Calder Birdsey and Brandon Choe 
- * Updated: 4/26/20
+ * Updated: 5/15/20
  * 
- * Description: 
+ * Description: Driver file for Connect-4 Simulation of two AI players. Runs a 
+ * simulation of given number of games between an advanced AI agent and a greedy 
+ * agent, reporting statistics on the simulation. 
  */
  
 public class AIC4_Sim {
     
-    // init game to begin with human turn
+    // init game
     public static boolean humanTurn = true; 
-    public static int simCount = 1; 
+    public static int simCount = 100; 
     public static int ties = 0; 
     public static int greedyWin = 0; 
     public static int smartWin = 0; 
     public static int moveCountSum = 0; 
-    public static ArrayList<Integer> moveCounts = new ArrayList<Integer>();  
 
     /**
-     * main function to run cli connect-4 game - reads from command line for 
-     * human turns and creates instances of AI agent when AIs turn to move. 
+     * main function to run CLI connect-4 game
      */
     public static void main(String[] args) {
         System.out.println("\nAI Connect-4 Statistical Simulator: Simulating " + simCount + " games between greedy AI and advanced minimax AI...");
@@ -49,11 +47,9 @@ public class AIC4_Sim {
                     smartAgent.initAgent(board); 
                     turn = 0; 
                 }
-                board.printBoard();
             }
 
             // store move count 
-            moveCounts.add(board.moveCount);
             moveCountSum += board.moveCount;  
 
             // store winner
@@ -65,12 +61,14 @@ public class AIC4_Sim {
                 else 
                     greedyWin++; 
             }
-            System.out.print(".");
+            System.out.print("#");
             gameCount ++; 
         }
 
+        // get average moves
         double avgMoves = moveCountSum / simCount; 
 
+        // return statistics
         System.out.println("\nSimulation complete...");
         System.out.println("Performance statistics:");
         System.out.println("Advanced AI won " + smartWin + " out of " + simCount + " games.");
